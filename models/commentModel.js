@@ -1,11 +1,15 @@
 const { sequelize } = require('../controllers/db');
+const { DataTypes } = require('sequelize');
 
-// Comment model
 const Comment = sequelize.define('comment', {
-    text: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    }
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  text: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  }
 });
 
 module.exports = { Comment };
