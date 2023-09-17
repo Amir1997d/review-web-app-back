@@ -64,12 +64,6 @@ const getReviewByReviewId = async (req, res) => {
         },
         {
           model: Comment
-        },
-        {
-          model: UserReviewLike,
-        },
-        {
-          model: UserReviewRating
         }
       ]
     });

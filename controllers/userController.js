@@ -113,7 +113,7 @@ const updatePreferredLang = async (req, res) => {
             }
         });
         res.status(200).json({message: "preferred language is updated!"});
-    } catch {
+    } catch(error) {
         console.error('Error updating prefered language:', error);
         res.status(500).json({ error: 'Unable to update prefered language' });
     }
@@ -136,14 +136,14 @@ const deleteUser = async (req, res) => {
 
 const updateUserStatus = async (req, res) => {
     try {
-        const { userId, isBlocked } = req.body; 
-        await User.update({ isBlocked }, {
+        const { userId, userStatus } = req.body; 
+        await User.update({ isBlocked: userStatus }, {
             where: {
                 id: userId
             }
         });
         res.status(200).json({ message: "user status is updated!"});
-    } catch {
+    } catch(error) {
         console.error('Error updating user status:', error);
         res.status(500).json({ error: 'Unable to update user status' });
     }
@@ -151,14 +151,14 @@ const updateUserStatus = async (req, res) => {
 
 const updateUserRole = async (req, res) => {
     try {
-        const { userId, isAdmin } = req.body; 
-        await User.update({ isAdmin }, {
+        const { userId, userRole } = req.body; 
+        await User.update({ isAdmin: userRole }, {
             where: {
                 id: userId
             }
         });
-        res.status(200).json({ message: "user role is updated!"});
-    } catch {
+        res.status(200).json({ message: "user role is updated!" });
+    } catch(error) {
         console.error('Error updating user role:', error);
         res.status(500).json({ error: 'Unable to update user role' });
     }
