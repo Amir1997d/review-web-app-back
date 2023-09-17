@@ -119,10 +119,58 @@ const updatePreferredLang = async (req, res) => {
     }
 }
 
+const deleteUser = async (req, res) => {
+    const { userId } = req.body;
+    try {
+        await User.destroy({
+          where: {
+            id: userId
+          }
+        });
+        res.status(202).json({ message: "user is deleted!" });
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ error: 'Unable to delete user' });
+      }
+}
+
+const updateUserStatus = async (req, res) => {
+    try {
+        const { userId, isBlocked } = req.body; 
+        await User.update({ isBlocked }, {
+            where: {
+                id: userId
+            }
+        });
+        res.status(200).json({ message: "user status is updated!"});
+    } catch {
+        console.error('Error updating user status:', error);
+        res.status(500).json({ error: 'Unable to update user status' });
+    }
+}
+
+const updateUserRole = async (req, res) => {
+    try {
+        const { userId, isAdmin } = req.body; 
+        await User.update({ isAdmin }, {
+            where: {
+                id: userId
+            }
+        });
+        res.status(200).json({ message: "user role is updated!"});
+    } catch {
+        console.error('Error updating user role:', error);
+        res.status(500).json({ error: 'Unable to update user role' });
+    }
+}
+
 module.exports = {
     getAllUsers,
     addUserByGoogle,
     addUserByGithub,
     getUserById,
-    updatePreferredLang
+    updatePreferredLang,
+    deleteUser,
+    updateUserStatus,
+    updateUserRole
 }
