@@ -104,6 +104,20 @@ const getUserById = async (req, res) => {
     }
 }
 
+const getUsernameById = async (req, res) => {
+    try {
+      let user = await User.findOne({
+        where: {
+          id: req.params.userId
+        }
+      });
+      res.status(200).json(user.username);
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      res.status(500).json({ error: 'Unable to fetch user' });
+    }
+}
+
 const updatePreferredLang = async (req, res) => {
     try {
         const { preferredLanguage, userId } = req.body; 
@@ -169,6 +183,7 @@ module.exports = {
     addUserByGoogle,
     addUserByGithub,
     getUserById,
+    getUsernameById,
     updatePreferredLang,
     deleteUser,
     updateUserStatus,

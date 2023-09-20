@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const { getRatesByReviewId, addRating } = require('../controllers/tagController');
+const { getRating, addRating, calAndUpdateAvgRating } = require('../controllers/userReviewRateController');
 
-router.get('/:reviewId', getRatesByReviewId);
+router.post('/get-rating', getRating);
 router.post('/add-rating', addRating);
+router.get('/get-avg-rating/:reviewId', calAndUpdateAvgRating);
 
 module.exports = router;

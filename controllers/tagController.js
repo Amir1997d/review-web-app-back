@@ -1,5 +1,6 @@
-const { Review, ReviewTag } = require('../models/reviewModel');
+const { Review } = require('../models/reviewModel');
 const { Tag } = require('../models/tagModel');
+const { sequelize } = require('../controllers/db');
 
 const getTags = async (req, res) => {
   try {
@@ -8,6 +9,25 @@ const getTags = async (req, res) => {
   } catch (error) {
     console.error('Error fetching tags:', error);
     res.status(500).json({ error: 'Unable to fetch tags' });
+  }
+}
+
+const getAndCountTags = async (req, res) => {
+  try {
+    const rows = await Tag.findAll({
+      attributes: ['name', [sequelize.fn('COUNT', sequelize.col('name')), 'count']],
+      group: ['name'],
+    });
+
+    const transformedData = rows.map((row) => ({
+      value: row.getDataValue('name'),
+      count: row.getDataValue('count'),
+    }));
+
+    res.json(transformedData);
+  } catch (error) {
+    console.error('Error retrieving data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
@@ -44,6 +64,7 @@ const addTags = async (req, res) => {
 
 module.exports = {
     getTags,
+    getAndCountTags,
     getTagsByReviewId,
     addTags,
 }

@@ -8,7 +8,16 @@ const { UserReviewRating } = require('../models/userReviewRate');
 // All reviews
 const getReviews = async (req, res) => {
   try {
-    const reviews = await Review.findAll();
+    const reviews = await Review.findAll({
+      include: [
+        {
+          model: Tag,
+        },
+        {
+          model: Comment
+        }
+      ]
+    });
     res.status(200).json(reviews);
   } catch (error) {
     console.error('Error fetching reviews:', error);
@@ -27,7 +36,8 @@ const getTopReviews = async (req, res) => {
       },
       order: [
         ['avgRate', 'DESC']
-      ]
+      ],
+      limit: 10
     });
     res.status(200).json(topReviews);
   } catch (error) {
@@ -42,7 +52,8 @@ const getRecentlyReviews = async (req, res) => {
     const recentlyReviews = await Review.findAll({
       order: [
         ['createdAt', 'DESC']
-      ]
+      ],
+      limit: 10
     });
     res.status(200).json(recentlyReviews);
   } catch (error) {
@@ -116,6 +127,49 @@ const createReview = async (req, res) => {
   }
 }
 
+// update review and its Tags
+const editReview = async (req, res) => {
+  try {
+    const { name, reviewedItemName, group, text, imgUrl, grade, tags, reviewId } = req.body;
+    const oldReview = await Review.findOne({
+      where: { id: reviewId }
+    });
+
+    const oldTags = await oldReview.getTags();
+    for (const oldTag of oldTags) {
+      await oldTag.destroy();
+    }
+
+    const [rowsUpdated, [newReview]] = await Review.update(
+      {
+        name,
+        reviewedItemName,
+        group,
+        text,
+        imgUrl,
+        grade,
+      },
+      {
+        returning: true,
+        where: {
+          id: reviewId
+        }
+      }
+    );
+
+    const tagPromises = tags.map(async (tag) => {
+      const [reviewTag] = await Tag.findOrCreate({ where: { name: tag } });
+      await newReview.addTag(reviewTag);
+    });
+    await Promise.all(tagPromises);
+
+    res.status(200).json({ message: "the review is updated!" });
+  } catch (error) {
+    console.error('Error updating the review:', error);
+    res.status(500).json({ error: 'Unable to update the review' });
+  }
+};
+
 // Delete review
 const deleteReview = async (req, res) => {
   try {
@@ -138,5 +192,6 @@ module.exports = {
   getReviewByReviewId,
   getReviewsByUserId,
   createReview,
-  deleteReview
+  editReview,
+  deleteReview,
 }

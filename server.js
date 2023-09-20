@@ -17,7 +17,7 @@ const users = require('./api/user');
 const groups = require('./api/group');
 const tags = require('./api/tag');
 const userLikes = require('./api/userLike');
-// const userRatings = require('./api/userReviewRate');
+const userRatings = require('./api/userReviewRate');
 
 app.use(
     session({
@@ -48,9 +48,8 @@ app.use('/api/reviews', reviews);
 app.use('/api/comments', comments);
 app.use('/api/groups', groups);
 app.use('/api/tags', tags);
-app.use('/api/userLikes', userLikes);
-// app.use('/api/user-ratings', userRatings);
-// app.use('/api/users', users);
+app.use('/api/likes', userLikes);
+app.use('/api/ratings', userRatings);
 
 app.listen(process.env.PORT, () => {
     console.log(`Express server is running on port 5000...`);
