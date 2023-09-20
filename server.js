@@ -32,7 +32,8 @@ app.use(passport.session());
 
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        // origin: "http://localhost:3000",
+        origiin: "https://reviewer-6vyp.onrender.com",
         methods: "GET,POST,PUT,DELETE",
         credentials: true,
     })
