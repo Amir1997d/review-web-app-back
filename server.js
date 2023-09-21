@@ -33,7 +33,7 @@ app.use(passport.session());
 app.use(
     cors({
         // origin: "http://localhost:3000",
-        origin: "https://www.amir.systematic.ly:3000",
+        origin: "http://www.amir.systematic.ly:3000",
         methods: "GET,POST,PUT,DELETE",
         credentials: true,
     })
