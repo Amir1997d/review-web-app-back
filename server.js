@@ -32,7 +32,7 @@ app.use(passport.session());
 
 app.use(
     cors({
-        origin: "http://www.amir.systematic.ly:3000",
+        origin: ["http://amir.systematic.ly:3000","http://185.220.205.86:3000"],
         methods: "GET,POST,PUT,DELETE",
         credentials: true,
     })
