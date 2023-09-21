@@ -34,7 +34,7 @@ app.use(
     cors({
         // origin: "http://localhost:3000",
         // origin: "https://reviewer-6vyp.onrender.com",
-        origin: "https://press-brake.ir",
+        origin: "http://press-brake.ir:3000",
         methods: "GET,POST,PUT,DELETE",
         credentials: true,
     })
